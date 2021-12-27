@@ -12,8 +12,6 @@ export const statement = (invoice, plays) => {
   }).format;
 
   for (let perf of invoice.performances) {
-    let thisAmount = amountFor(perf);
-
     // Add volume credits
     volumeCredits += Math.max(perf.audience - 30, 0);
     //Add extra creadt for every ten comedy attendees
@@ -21,10 +19,10 @@ export const statement = (invoice, plays) => {
       volumeCredits += Math.floor(perf.audience / 5);
 
     //print line for this order
-    result += ` ${playFor(perf).name}: ${format(thisAmount / 100)} (${
+    result += ` ${playFor(perf).name}: ${format(amountFor(perf) / 100)} (${
       perf.audience
     } seats)`;
-    totalAmount += thisAmount;
+    totalAmount += amountFor(perf);
   }
   result += `Amount owed is ${format(totalAmount / 100)}`;
   result += `You earned ${volumeCredits} credits`;
