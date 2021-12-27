@@ -17,7 +17,7 @@ export const statement = (invoice, plays) => {
     // Add volume credits
     volumeCredits += Math.max(perf.audience - 30, 0);
     //Add extra creadt for every ten comedy attendees
-    if ("comedy" == playFor(perf))
+    if ("comedy" == playFor(perf).type)
       volumeCredits += Math.floor(perf.audience / 5);
 
     //print line for this order
