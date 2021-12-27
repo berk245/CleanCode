@@ -5,24 +5,11 @@ class PerformanceCalculator {
   }
 
   get amount() {
-    let result = 0;
-    switch (this.play.type) {
-      case "tragedy":
-        throw "Should not happen";
-      case "comedy":
-        throw "Nope";
-      default:
-        throw new Error(`Unknown play type: ${this.play.type}`);
-    }
-    return result;
+    throw new Error("subclass responsibility, should not be called");
   }
   get volumeCredits() {
-    let result = 0;
-    result += Math.max(this.performance.audience - 30, 0);
+    return Math.max(this.performance.audience - 30, 0);
     //Add extra creadt for every ten comedy attendees
-    if ("comedy" == this.play.type)
-      result += Math.floor(this.performance.audience / 5);
-    return result;
   }
 }
 
@@ -42,6 +29,9 @@ class ComedyCalculator extends PerformanceCalculator {
       result += 10000 + 500 * (this.performance.audience - 20);
     result += 300 * this.performance.audience;
     return result;
+  }
+  get volumeCredits() {
+    return super.volumeCredits + Math.floor(this.performance.audience / 5);
   }
 }
 
