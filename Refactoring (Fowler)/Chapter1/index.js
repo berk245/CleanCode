@@ -3,7 +3,6 @@ import plays from "./plays.js";
 
 export const statement = (invoice, plays) => {
   let totalAmount = 0;
-  let volumeCredits = 0;
   let result = `Statement for ${invoice.customer}`;
 
   for (let perf of invoice.performances) {
@@ -13,9 +12,12 @@ export const statement = (invoice, plays) => {
     } seats)`;
     totalAmount += amountFor(perf);
   }
+
+  let volumeCredits = 0;
   for (let perf of invoice.performances) {
     volumeCredits += volumeCreditsFor(perf);
   }
+
   result += `Amount owed is ${usd(totalAmount)}`;
   result += `You earned ${volumeCredits} credits`;
   return result;
