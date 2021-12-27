@@ -2,7 +2,6 @@ import invoices from "./invoices.js";
 import plays from "./plays.js";
 
 export const statement = (invoice, plays) => {
-  let totalAmount = 0;
   let result = `Statement for ${invoice.customer}`;
 
   for (let perf of invoice.performances) {
@@ -10,16 +9,9 @@ export const statement = (invoice, plays) => {
     result += ` ${playFor(perf).name}: ${usd(amountFor(perf))} (${
       perf.audience
     } seats)`;
-    totalAmount += amountFor(perf);
   }
-
-  let volumeCredits = 0;
-  for (let perf of invoice.performances) {
-    volumeCredits += volumeCreditsFor(perf);
-  }
-
-  result += `Amount owed is ${usd(totalAmount)}`;
-  result += `You earned ${volumeCredits} credits`;
+  result += `Amount owed is ${usd(totalAmount(invoice))}`;
+  result += `You earned ${totalVolumeCredits(invoice)} credits`;
   return result;
 };
 
@@ -45,6 +37,22 @@ const amountFor = (aPerformance) => {
 
 const playFor = (aPerformance) => {
   return plays[aPerformance.playID];
+};
+
+const totalAmount = (invoice) => {
+  let result = 0;
+  for (let perf of invoice.performances) {
+    result += amountFor(perf);
+  }
+  return result;
+};
+
+const totalVolumeCredits = (invoice) => {
+  let result = 0;
+  for (let perf of invoice.performances) {
+    result += volumeCreditsFor(perf);
+  }
+  return result;
 };
 
 const volumeCreditsFor = (aPerformance) => {
