@@ -12,11 +12,7 @@ export const statement = (invoice, plays) => {
   }).format;
 
   for (let perf of invoice.performances) {
-    // Add volume credits
-    volumeCredits += Math.max(perf.audience - 30, 0);
-    //Add extra creadt for every ten comedy attendees
-    if ("comedy" == playFor(perf).type)
-      volumeCredits += Math.floor(perf.audience / 5);
+    volumeCredits += volumeCreditsFor(perf);
 
     //print line for this order
     result += ` ${playFor(perf).name}: ${format(amountFor(perf) / 100)} (${
@@ -51,6 +47,15 @@ const amountFor = (aPerformance) => {
 
 const playFor = (aPerformance) => {
   return plays[aPerformance.playID];
+};
+
+const volumeCreditsFor = (perf) => {
+  let volumeCredits = 0;
+  volumeCredits += Math.max(perf.audience - 30, 0);
+  //Add extra creadt for every ten comedy attendees
+  if ("comedy" == playFor(perf).type)
+    volumeCredits += Math.floor(perf.audience / 5);
+  return volumeCredits;
 };
 
 for (let invoice of invoices) {
