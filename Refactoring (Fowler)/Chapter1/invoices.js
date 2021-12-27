@@ -1,4 +1,4 @@
-export default [
+const invoices = [
   {
     customer: "BigCo",
     performances: [
@@ -17,3 +17,4 @@ export default [
     ],
   },
 ];
+export default invoices;
