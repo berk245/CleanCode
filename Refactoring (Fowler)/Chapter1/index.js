@@ -32,21 +32,21 @@ export const statement = (invoice, plays) => {
 };
 
 const amountFor = (perf, play) => {
-  let thisAmount = 0;
+  let result = 0;
   switch (play.type) {
     case "tragedy":
-      thisAmount = 40000;
-      if (perf.audience > 30) thisAmount += 1000 * (perf.audience - 30);
+      result = 40000;
+      if (perf.audience > 30) result += 1000 * (perf.audience - 30);
       break;
     case "comedy":
-      thisAmount = 30000;
-      if (perf.audience > 20) thisAmount += 10000 + 500 * (perf.audience - 20);
-      thisAmount += 300 * perf.audience;
+      result = 30000;
+      if (perf.audience > 20) result += 10000 + 500 * (perf.audience - 20);
+      result += 300 * perf.audience;
       break;
     default:
       throw new Error(`Unknown play type: ${play.type}`);
   }
-  return thisAmount;
+  return result;
 };
 
 for (let invoice of invoices) {
