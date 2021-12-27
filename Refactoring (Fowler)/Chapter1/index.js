@@ -5,16 +5,18 @@ export const statement = (invoice, plays) => {
   let totalAmount = 0;
   let volumeCredits = 0;
   let result = `Statement for ${invoice.customer}`;
-  for (let perf of invoice.performances) {
-    volumeCredits += volumeCreditsFor(perf);
 
+  for (let perf of invoice.performances) {
     //print line for this order
-    result += ` ${playFor(perf).name}: ${usd(amountFor(perf) / 100)} (${
+    result += ` ${playFor(perf).name}: ${usd(amountFor(perf))} (${
       perf.audience
     } seats)`;
     totalAmount += amountFor(perf);
   }
-  result += `Amount owed is ${usd(totalAmount / 100)}`;
+  for (let perf of invoice.performances) {
+    volumeCredits += volumeCreditsFor(perf);
+  }
+  result += `Amount owed is ${usd(totalAmount)}`;
   result += `You earned ${volumeCredits} credits`;
   return result;
 };
@@ -57,7 +59,7 @@ const usd = (aNumber) => {
     style: "currency",
     currency: "USD",
     minimumFractionDigits: 2,
-  }).format(aNumber);
+  }).format(aNumber / 100);
 };
 
 for (let invoice of invoices) {
