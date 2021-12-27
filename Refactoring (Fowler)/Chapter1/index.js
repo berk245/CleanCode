@@ -49,12 +49,12 @@ const playFor = (aPerformance) => {
   return plays[aPerformance.playID];
 };
 
-const volumeCreditsFor = (perf) => {
+const volumeCreditsFor = (aPerformance) => {
   let volumeCredits = 0;
-  volumeCredits += Math.max(perf.audience - 30, 0);
+  volumeCredits += Math.max(aPerformance.audience - 30, 0);
   //Add extra creadt for every ten comedy attendees
-  if ("comedy" == playFor(perf).type)
-    volumeCredits += Math.floor(perf.audience / 5);
+  if ("comedy" == playFor(aPerformance).type)
+    volumeCredits += Math.floor(aPerformance.audience / 5);
   return volumeCredits;
 };
 
