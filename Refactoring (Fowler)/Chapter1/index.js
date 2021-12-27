@@ -5,7 +5,18 @@ import plays from "./plays.js";
 function statement(invoice, plays) {
   return renderPlainText(createStatementData(invoice, plays), plays);
 }
+function renderPlainText(data, plays) {
+  let result = `Statement for ${data.customer}`;
 
+  for (let perf of data.performances) {
+    result += ` ${perf.play.name}: ${usd(perf.amount)} (${
+      perf.audience
+    } seats)`;
+  }
+  result += `Amount owed is ${usd(data.totalAmount)}`;
+  result += `You earned ${data.totalVolumeCredits} credits`;
+  return result;
+}
 function htmlStatement(invoice, plays) {
   return renderHtml(createStatementData(invoice, plays));
 }
@@ -28,19 +39,6 @@ function usd(aNumber) {
     currency: "USD",
     minimumFractionDigits: 2,
   }).format(aNumber / 100);
-}
-
-function renderPlainText(data, plays) {
-  let result = `Statement for ${data.customer}`;
-
-  for (let perf of data.performances) {
-    result += ` ${perf.play.name}: ${usd(perf.amount)} (${
-      perf.audience
-    } seats)`;
-  }
-  result += `Amount owed is ${usd(data.totalAmount)}`;
-  result += `You earned ${data.totalVolumeCredits} credits`;
-  return result;
 }
 
 for (let invoice of invoices) {
