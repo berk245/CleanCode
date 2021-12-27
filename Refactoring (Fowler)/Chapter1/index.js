@@ -4,7 +4,7 @@ import plays from "./plays.js";
 export const statement = (invoice, plays) => {
   let totalAmount = 0;
   let volumeCredits = 0;
-  let result = `Statement for ${invoice.customer}\n`;
+  let result = `Statement for ${invoice.customer}`;
   const format = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
@@ -12,7 +12,7 @@ export const statement = (invoice, plays) => {
   }).format;
 
   for (let perf of invoice.performances) {
-    let thisAmount = amountFor(perf, playFor(perf));
+    let thisAmount = amountFor(perf);
 
     // Add volume credits
     volumeCredits += Math.max(perf.audience - 30, 0);
@@ -23,17 +23,17 @@ export const statement = (invoice, plays) => {
     //print line for this order
     result += ` ${playFor(perf).name}: ${format(thisAmount / 100)} (${
       perf.audience
-    } seats)\n`;
+    } seats)`;
     totalAmount += thisAmount;
   }
-  result += `Amount owed is ${format(totalAmount / 100)}\n`;
-  result += `You earned ${volumeCredits} credits\n`;
+  result += `Amount owed is ${format(totalAmount / 100)}`;
+  result += `You earned ${volumeCredits} credits`;
   return result;
 };
 
-const amountFor = (aPerformance, play) => {
+const amountFor = (aPerformance) => {
   let result = 0;
-  switch (play.type) {
+  switch (playFor(aPerformance).type) {
     case "tragedy":
       result = 40000;
       if (aPerformance.audience > 30)
@@ -46,7 +46,7 @@ const amountFor = (aPerformance, play) => {
       result += 300 * aPerformance.audience;
       break;
     default:
-      throw new Error(`Unknown play type: ${play.type}`);
+      throw new Error(`Unknown play type: ${playFor(aPerformance).type}`);
   }
   return result;
 };
@@ -56,5 +56,9 @@ const playFor = (aPerformance) => {
 };
 
 for (let invoice of invoices) {
-  console.log(statement(invoice, plays));
+  let result = statement(invoice, plays);
+  console.log(
+    result ===
+      "Statement for BigCo Hamlet: $650.00 (55 seats) As You Like It: $580.00 (35 seats) Othello: $500.00 (40 seats)Amount owed is $1,730.00You earned 47 credits"
+  );
 }
