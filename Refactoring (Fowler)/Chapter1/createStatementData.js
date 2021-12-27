@@ -33,6 +33,17 @@ class PerformanceCalculator {
   }
 }
 
+class TragedyCalculator extends PerformanceCalculator {
+  get amount() {
+    let result = 40000;
+    if (this.performance.audience > 30) {
+      result += 1000 * (this.performance.audience - 30);
+    }
+    return result;
+  }
+}
+class ComedyCalculator extends PerformanceCalculator {}
+
 function createStatementData(invoice, plays) {
   const result = {};
   result.customer = invoice.customer;
@@ -53,7 +64,14 @@ function createStatementData(invoice, plays) {
     return result;
   }
   function createPerformanceCalculator(aPerformance, aPlay) {
-    return new PerformanceCalculator(aPerformance, aPlay);
+    switch (aPlay.type) {
+      case "tragedy":
+        return new TragedyCalculator(aPerformance, aPlay);
+      case "comedy":
+        return new ComedyCalculator(aPerformance, aPlay);
+      default:
+        throw new Error(`unknown type: ${aPlay.type}`);
+    }
   }
   function playFor(aPerformance) {
     return plays[aPerformance.playID];
