@@ -1,11 +1,12 @@
 import invoices from "./invoices.js";
 import plays from "./plays.js";
 
-export const statement = (invoice, plays) => {
+function statement(invoice, plays) {
+  return renderPlainText(invoice, plays);
+}
+function renderPlainText(invoice, plays) {
   let result = `Statement for ${invoice.customer}`;
-
   for (let perf of invoice.performances) {
-    //print line for this order
     result += ` ${playFor(perf).name}: ${usd(amountFor(perf))} (${
       perf.audience
     } seats)`;
@@ -70,7 +71,7 @@ export const statement = (invoice, plays) => {
       minimumFractionDigits: 2,
     }).format(aNumber / 100);
   }
-};
+}
 
 for (let invoice of invoices) {
   let result = statement(invoice, plays);
